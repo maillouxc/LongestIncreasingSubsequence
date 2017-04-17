@@ -91,7 +91,7 @@ public class LongestIncreasingSubsequence
 	private static int getTestSequenceLengthFromUser()
 	{
 		System.out.println("Enter test sequence length:");
-		System.out.println("Things tend to get O(scary) at values above 2^16");
+		System.out.println("(Things tend to get O(scary) at values above 2^16)");
 		Scanner inputScanner = new Scanner(System.in);
 		int testSequenceLength = inputScanner.nextInt();
 		inputScanner.close();
