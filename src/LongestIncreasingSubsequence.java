@@ -30,36 +30,45 @@ public class LongestIncreasingSubsequence
 	 * This solution runs in O(N^2), where N is the number of elements in the
 	 * provided sequence.
 	 * 
+	 * If I were to use binary search here instead of linear search,
+	 * the runtime would be O(Nlog(N)).
+	 * 
+	 * In the case where there are two equal length increasing subsequences,
+	 * no guarantees are made about which is returned.
+	 * 
 	 * @return The longest increasing subsequence of integer values present in
 	 * the provided sequence.
 	 */
 	private static List<Integer> getLongestIncreasingSubsequence(
 			List<Integer> sequence
 			)
-	{
+	{	
 		ArrayList<ArrayList<Integer>> cache = 
-				new ArrayList<ArrayList<Integer>>();
-		// Populate the first element first to avoid a NullPointerException
-		cache.add(new ArrayList<Integer>());
-		
+				new ArrayList<ArrayList<Integer>>(sequence.size());
+		// Populate the elements to avoid a NullPointerException
 		for(int i = 0; i < sequence.size(); i++)
+		{
+			cache.add(new ArrayList<Integer>());
+		}
+		cache.get(0).add(sequence.get(0));
+		
+		// start from the first index, since we just handled the 0th
+		for(int i = 1; i < sequence.size(); i++)
 		{
 			// Add element if greater than tail of all existing subsequences
 			for(int j = 0; j < i; j++)
 			{
-				int tail = cache.get(j).size() - 1;
-				if(cache.get(j).get(tail) < sequence.get(i) 
-						&& (cache.get(i).size() < (cache.get(j).size() + 1) ))
+				if((sequence.get(i) > sequence.get(j)) 
+						&& (cache.get(i).size() < cache.get(j).size() + 1))
 				{
-					cache.set(i, cache.get(j));
+					cache.set(i, new ArrayList<>(cache.get(j)));
 				}
 			}
-			cache.add(new ArrayList<Integer>());
-			cache.get(i).add(sequence.get(i));
+			cache.get(i).add(sequence.get(i));					
 		}
 	
 		// Find the longest subsequence stored in the cache and return it
-		List<Integer> longestIncreasingSubsequence = new ArrayList<Integer>();
+		List<Integer> longestIncreasingSubsequence = cache.get(0);
 		for(List<Integer> subsequence : cache)
 		{
 			if(subsequence.size() > longestIncreasingSubsequence.size())
